@@ -1,0 +1,4 @@
+model: itemknn
+name: itemknn_ncf
+params:
+  top_k_neighbors: 200

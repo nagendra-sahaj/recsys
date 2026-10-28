@@ -1,0 +1,7 @@
+model: als
+name: als_ncf
+params:
+  factors: 64
+  regularization: 0.01
+  alpha: 20.0      # confidence weight on observed interactions (Hu/Koren/Volinsky)
+  iterations: 15

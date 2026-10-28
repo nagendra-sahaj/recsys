@@ -1,0 +1,34 @@
+[project]
+name = "recsys-benchmarks"
+version = "0.1.0"
+description = "External benchmark comparison for recsys_large_scale, via RecBole"
+readme = "README.md"
+# Pinned by RecBole, not by preference. RecBole depends on ray>=1.13.0,<=2.6.3, and
+# ray 2.6.3's newest macOS arm64 wheel is cp311 -- there is no cp312+. This is why the
+# benchmark work lives in its own project instead of the 3.14 venv recsys_large_scale uses.
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "recbole>=1.2.1",
+    "torch>=2.0",
+    "pyarrow>=14.0",
+    "matplotlib>=3.7",
+    # RecBole 1.2.1 is a Feb-2025 release and predates the NumPy 2 / pandas 3 era, but
+    # declares only lower bounds (numpy>=1.17.2, pandas>=1.3) -- so a fresh resolve pulls
+    # numpy 2.x and pandas 3.x and breaks on import. Specifically:
+    # recbole/config/configurator.py's compatibility_settings() unconditionally executes
+    # `np.float = np.float_`, and np.float_/np.complex_/np.unicode_ were all removed in
+    # NumPy 2.0. It is called from Config.__init__, so there is no code path around it.
+    # These caps pin the environment to the era RecBole was actually written against.
+    "numpy>=1.26,<2",
+    "pandas>=2.0,<3",
+    # ray 2.6.3 (pinned transitively by RecBole) imports pkg_resources in
+    # ray/_private/parameter.py. pkg_resources ships with setuptools, which pip-era
+    # tooling seeded into every virtualenv but uv does not -- hence
+    # "ModuleNotFoundError: No module named 'pkg_resources'" without this line.
+    # Capped at <81 because setuptools 81 began removing pkg_resources, and ray 2.6.3
+    # is from 2023 and will never be updated to stop using it.
+    "setuptools>=68,<81",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3"]

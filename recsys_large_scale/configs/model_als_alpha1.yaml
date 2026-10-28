@@ -1,0 +1,10 @@
+# Hyperparameter comparison variant: alpha=1 means observed interactions get almost no
+# extra confidence weight over unobserved ones (compare against model_als.yaml's
+# alpha=20). Everything else matches model_als.yaml.
+model: als
+name: als_alpha1
+params:
+  factors: 64
+  regularization: 0.01
+  alpha: 1.0
+  iterations: 15

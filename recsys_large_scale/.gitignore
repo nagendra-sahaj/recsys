@@ -1,0 +1,22 @@
+.venv/
+__pycache__/
+*.pyc
+
+# raw/processed data - large, download it yourself per the README
+data/raw/
+data/processed/
+
+# trained models, indices and embedding dumps - regenerate by running the
+# pipeline. The result logs are small and are kept, so every number in the
+# write-ups can be traced to its source row without a rerun.
+artifacts/*
+!artifacts/results/
+artifacts/results/*
+!artifacts/results/*.csv
+
+# local secrets
+kaggle.json
+.env
+
+.DS_Store
+.ipynb_checkpoints/

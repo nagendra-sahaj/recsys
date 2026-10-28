@@ -1,0 +1,34 @@
+# Phase B5: the same airtight setup as recbole_ml1m_ours_full.yaml, but on our existing
+# ML-25M split (161,572 users / 23,965 items / 15.26M train rows). Expect this to be slow
+# on CPU; neural models may be impractical here, which is a documented outcome rather
+# than a failure -- the classical models are the ones that matter for the comparison.
+
+dataset: ml25m-ours
+data_path: dataset/
+# Same pre-split setup as recbole_ml1m_ours_full.yaml: export_to_recbole.py writes our
+# three folds as separate files and `benchmark_filename` makes RecBole use them as-is,
+# skipping its own filtering and splitting. `eval_args.order`/`split` do not apply.
+benchmark_filename: [train, valid, test]
+
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+TIME_FIELD: timestamp
+load_col:
+  inter: [user_id, item_id, timestamp]
+
+eval_args:
+  group_by: user
+  mode: full
+
+metrics: ['Recall', 'NDCG', 'MRR', 'Hit', 'Precision', 'MAP', 'ItemCoverage', 'AveragePopularity', 'ShannonEntropy']
+topk: [5, 10, 20]
+valid_metric: NDCG@10
+
+epochs: 100
+train_batch_size: 8192
+eval_batch_size: 8192
+stopping_step: 5          # stop earlier than ML-1M; each epoch is far more expensive here
+
+seed: 42
+reproducibility: True
+show_progress: False

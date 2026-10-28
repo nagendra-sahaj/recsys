@@ -1,0 +1,33 @@
+model: two_stage
+name: two_stage
+
+# Phase 2's LEARNINGS.md found alpha=1 generalizes better than alpha=20 on
+# accuracy/ranking -- that's exactly the property we want from the retrieval stage's
+# base embeddings, so we build candidate generation on top of it rather than the
+# "canonical" alpha=20 config.
+base_als_model: artifacts/models/als_alpha1.pkl
+itemknn_model: artifacts/models/itemknn.pkl
+
+n_candidates: 200
+
+ann_index:
+  nlist: 100   # IndexIVFFlat cluster count -- an approximate index on purpose, so the
+               # ANN-vs-exact recall diagnostic this pipeline prints is measuring
+               # something real rather than trivially reporting 1.0
+  nprobe: 10
+
+# reranker training set is built from the *validation* split (never test), using
+# candidate features computed from models fit on *train* only -- see
+# scripts/run_two_stage_pipeline.py's docstring for why this avoids leakage.
+# Subsampled for tractability on a laptop; raise this if your machine handles it fine.
+max_training_users: 20000
+
+reranker:
+  n_estimators: 100
+  learning_rate: 0.05
+  num_leaves: 31
+
+# how many users to sample for the ANN-vs-exact candidate recall diagnostic
+ann_recall_check_users: 5000
+
+random_seed: 42

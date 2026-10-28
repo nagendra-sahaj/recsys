@@ -1,0 +1,30 @@
+dataset: hm
+
+raw_dir: data/raw/hm/
+processed_dir: data/processed/hm
+
+# see README's Phase 5 RUNBOOK for how to fetch these three files specifically (not the
+# whole competition, which also bundles ~36GB of product images we don't need)
+kaggle_competition: h-and-m-personalized-fashion-recommendations
+transactions_file: transactions_train.csv
+customers_file: customers.csv
+articles_file: articles.csv
+
+# H&M transactions are already implicit (every row is a purchase) -- no rating
+# threshold to apply, unlike MovieLens. The full history is ~2 years / 31.8M rows, far
+# more than this project needs on a laptop; keep a contiguous recent slice instead of a
+# random sample so the temporal splits below still mean something.
+date_window_days: 90
+
+# purchase frequency is naturally lower than movie-rating frequency, so these are lower
+# than MovieLens's (5, 5) -- min_user_interactions must stay >= 3, the leave-one-out
+# split's hard requirement (1 train + 1 val + 1 test row per user).
+min_user_interactions: 3
+min_item_interactions: 5
+
+split:
+  leave_one_out: true       # per user: last purchase (by t_dat) -> test, second-to-last -> val
+  global_time_split: true   # also produce a global-timestamp holdout, independent of the per-user split
+  global_holdout_days: 7    # last N days of the (post-windowing) date range used as the global test window
+
+random_seed: 42

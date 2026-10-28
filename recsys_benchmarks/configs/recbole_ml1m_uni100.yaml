@@ -1,0 +1,42 @@
+# Identical to recbole_ml1m_full.yaml in every respect except the ranking protocol:
+# the held-out item is ranked against 100 uniformly sampled items instead of the whole
+# catalog. Running both and diffing the results is the point -- same data, same models,
+# same hyperparameters, one setting changed.
+#
+# Mirrors `--eval-mode uni100` on our side (harness.parse_eval_mode).
+#
+# Beyond-accuracy metrics are dropped here: ItemCoverage/AveragePopularity/ShannonEntropy
+# computed over a 101-item random candidate pool describe the sampler, not the model.
+
+dataset: ml-1m
+data_path: dataset/
+
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+TIME_FIELD: timestamp
+load_col:
+  inter: [user_id, item_id, rating, timestamp]
+
+val_interval:
+  rating: "[3.5,inf)"
+user_inter_num_interval: "[5,inf)"
+item_inter_num_interval: "[5,inf)"
+
+eval_args:
+  group_by: user
+  order: TO
+  split: {'LS': 'valid_and_test'}
+  mode: uni100                     # <-- the only substantive difference
+
+metrics: ['Recall', 'NDCG', 'MRR', 'Hit', 'Precision', 'MAP']
+topk: [5, 10, 20]
+valid_metric: NDCG@10
+
+epochs: 100
+train_batch_size: 4096
+eval_batch_size: 4096
+stopping_step: 10
+
+seed: 42
+reproducibility: True
+show_progress: False

@@ -1,0 +1,7 @@
+model: bpr
+name: bpr_ncf
+params:
+  factors: 64
+  learning_rate: 0.01
+  regularization: 0.01
+  iterations: 100

@@ -1,0 +1,14 @@
+# This repository holds two projects only.
+# Everything else under this directory is excluded deliberately.
+/moviegeek/
+/recsys_beginner_kit/
+/recsys_hands_on_kit/
+/tech_report/
+/.claude/
+
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ipynb_checkpoints/

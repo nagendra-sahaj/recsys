@@ -1,0 +1,10 @@
+# alpha=1 variant, matching configs/model_als_alpha1.yaml. Worth keeping on ML-1M because
+# alpha=1 won on ML-25M while alpha=20 won on the much sparser H&M data -- ML-1M is denser
+# still, so this is the direct test of whether that density/confidence relationship holds.
+model: als
+name: als_alpha1_ml1m
+params:
+  factors: 64
+  regularization: 0.01
+  alpha: 1.0
+  iterations: 15

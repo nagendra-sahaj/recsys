@@ -1,0 +1,26 @@
+dataset: movielens25m
+
+raw_dir: data/raw/movielens25m/ml-25m
+processed_dir: data/processed/movielens25m
+download_url: https://files.grouplens.org/datasets/movielens/ml-25m.zip
+# the zip extracts into a top-level "ml-25m/" folder containing these files
+ratings_file: ratings.csv
+movies_file: movies.csv
+
+# how explicit 0.5-5 star ratings become implicit positive feedback
+positive_feedback:
+  mode: threshold        # "threshold": keep ratings >= min_rating as positives
+                          # "all": keep every rating as a positive, weighted by confidence_alpha
+  min_rating: 3.5
+  confidence_alpha: 20    # confidence = 1 + alpha * rating, used only when mode == "all"
+
+# drop users/items with fewer than this many interactions after the positive-feedback filter
+min_user_interactions: 5
+min_item_interactions: 5
+
+split:
+  leave_one_out: true       # per user: last interaction (by timestamp) -> test, second-to-last -> val
+  global_time_split: true   # also produce a global-timestamp holdout, independent of the per-user split
+  global_holdout_days: 14   # last N days of the dataset's timestamp range used as the global test window
+
+random_seed: 42

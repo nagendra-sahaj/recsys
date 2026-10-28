@@ -1,0 +1,11 @@
+# Same alpha=20-vs-alpha=1 comparison as MovieLens (see model_als.yaml /
+# model_als_alpha1.yaml) -- repeated here to check whether the ML-25M finding
+# ("alpha=1 generalizes better") transfers to a different implicit-signal domain
+# (purchases, much sparser per user) or was specific to movie ratings.
+model: als
+name: als_alpha1_hm
+params:
+  factors: 64
+  regularization: 0.01
+  alpha: 1.0
+  iterations: 15

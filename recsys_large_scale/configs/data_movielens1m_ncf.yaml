@@ -1,0 +1,46 @@
+# MovieLens 1M preprocessed to match the Neural Collaborative Filtering paper
+# (He et al., WWW'17, arXiv 1708.05031), so our models can be compared directly against
+# its published numbers rather than against a reference framework we run ourselves.
+#
+# Two deliberate differences from data_movielens1m.yaml, both taken from the paper:
+#
+#  * NO rating threshold. The paper (sec 4.1): "While it is an explicit feedback data, we
+#    have intentionally chosen it to investigate the performance of learning from the
+#    implicit signal of explicit feedback. To this end, we transformed it into implicit
+#    data, where each entry is marked as 0 or 1 indicating whether the user has rated the
+#    item." So a 1-star rating is a positive. min_rating 0.5 keeps everything, since
+#    ML-1M ratings are whole stars from 1 to 5.
+#
+#  * NO k-core filtering. ML-1M already guarantees at least 20 ratings per user, which is
+#    the only filter the paper relies on. Our usual 5-core would drop rare items and
+#    change the catalog size out from under the comparison.
+#
+# Target shape (paper, Table 1): 6,040 users / 3,706 items / 1,000,209 interactions.
+# build_splits.py prints these -- a mismatch means the comparison is not valid.
+#
+# Evaluate with `--eval-mode uni100`: the paper ranks the held-out item against 100
+# sampled negatives, which is exactly what uni100 does (100 negatives + the true item).
+
+dataset: movielens1m_ncf
+
+raw_dir: data/raw/movielens1m/ml-1m
+processed_dir: data/processed/movielens1m_ncf
+download_url: https://files.grouplens.org/datasets/movielens/ml-1m.zip
+loader: movielens_dat
+ratings_file: ratings.dat
+movies_file: movies.dat
+
+positive_feedback:
+  mode: threshold
+  min_rating: 0.5        # keeps every rating -- see note above
+  confidence_alpha: 20
+
+min_user_interactions: 1   # no filtering; ML-1M's own >=20-per-user is the only filter
+min_item_interactions: 1
+
+split:
+  leave_one_out: true
+  global_time_split: false   # not needed for this comparison
+  global_holdout_days: 14
+
+random_seed: 42

@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+*.pyc
+
+# RecBole atomic files (regenerable from recsys_large_scale's processed parquet,
+# or auto-downloaded for built-in datasets) and its training byproducts
+dataset/
+saved/
+log/
+log_tensorboard/
+
+# generated charts - regenerate by running the pipeline. The result logs are
+# small and are kept, so every number in the write-ups can be traced to its
+# source row without a rerun.
+results/*
+!results/*.csv
+
+.DS_Store
+.ipynb_checkpoints/

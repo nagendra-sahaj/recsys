@@ -1,0 +1,47 @@
+# RecBole run on OUR exported interaction set (scripts/export_to_recbole.py) rather than
+# RecBole's built-in ml-1m. This is the airtight half of the comparison: both systems see
+# byte-for-byte the same interactions, both sort by timestamp per user, both hold out the
+# last two. Any remaining difference is the models, not the data.
+#
+# Same pre-split setup as recbole_ml1m_ours_full.yaml, with the ranking protocol
+# switched to sampled negatives -- RecBole's half of the B4 protocol study, matching
+# `--eval-mode uni100` on our side. Beyond-accuracy metrics are dropped because they
+# would describe a random 101-item candidate pool rather than the model.
+#
+# `benchmark_filename` makes RecBole read our three pre-split folds as-is and skip both
+# its own filtering (dataset.py:161) and its own splitting (dataset.py:1815). That is the
+# point: it controls the SPLIT, not just the data. ML-1M users rate in bursts, so many of
+# a user's interactions share a timestamp -- our splitter breaks those ties by row order
+# and RecBole by its own rule, which could otherwise leave the two systems holding out
+# different items for the same user.
+#
+# Consequently there is no val_interval and no *_inter_num_interval here (the export is
+# already post-threshold and post-5-core), and `eval_args.order`/`split` are ignored.
+# Only `eval_args.mode` still applies.
+
+dataset: ml1m-ours
+data_path: dataset/
+benchmark_filename: [train, valid, test]
+
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+TIME_FIELD: timestamp
+load_col:
+  inter: [user_id, item_id, timestamp]
+
+eval_args:
+  group_by: user
+  mode: uni100
+
+metrics: ['Recall', 'NDCG', 'MRR', 'Hit', 'Precision', 'MAP']
+topk: [5, 10, 20]
+valid_metric: NDCG@10
+
+epochs: 100
+train_batch_size: 4096
+eval_batch_size: 4096
+stopping_step: 10
+
+seed: 42
+reproducibility: True
+show_progress: False

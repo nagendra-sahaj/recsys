@@ -1,0 +1,31 @@
+model: two_stage_hm
+name: two_stage_hm
+
+# Phase 5b part 1 found als_hm (alpha=20) beats als_alpha1_hm on H&M -- the opposite
+# of MovieLens's finding -- so the retrieval stage is built on top of the H&M winner.
+base_als_model: artifacts/models/als_hm.pkl
+itemknn_model: artifacts/models/itemknn_hm.pkl
+
+# product_group_name = H&M's broadest category level (~19 groups) -- chosen over the
+# far more granular product_type_name so most users have *some* purchase history in a
+# given candidate's category even with H&M's sparse per-user interaction counts.
+category_column: product_group_name
+
+n_candidates: 200
+
+ann_index:
+  nlist: 100
+  nprobe: 10
+
+# reranker training set is built from the *validation* split (never test), same
+# leakage-avoidance approach as scripts/run_two_stage_pipeline.py's MovieLens version.
+max_training_users: 20000
+
+reranker:
+  n_estimators: 100
+  learning_rate: 0.05
+  num_leaves: 31
+
+ann_recall_check_users: 5000
+
+random_seed: 42

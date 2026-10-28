@@ -1,0 +1,4 @@
+model: itemknn
+name: itemknn_ml1m
+params:
+  top_k_neighbors: 200

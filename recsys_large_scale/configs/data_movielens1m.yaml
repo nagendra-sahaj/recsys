@@ -1,0 +1,28 @@
+dataset: movielens1m
+
+raw_dir: data/raw/movielens1m/ml-1m
+processed_dir: data/processed/movielens1m
+download_url: https://files.grouplens.org/datasets/movielens/ml-1m.zip
+# ML-1M ships "::"-separated .dat files with no header, not CSVs -- hence the loader key
+loader: movielens_dat
+ratings_file: ratings.dat
+movies_file: movies.dat
+
+# Deliberately identical to configs/data_movielens25m.yaml so the only difference between
+# our ML-1M and ML-25M results is dataset size, not preprocessing. Note that ML-1M ratings
+# are whole stars (1-5), so the 3.5 threshold here is exactly "rating >= 4" -- which happens
+# to match the convention most published ML-1M results use.
+positive_feedback:
+  mode: threshold
+  min_rating: 3.5
+  confidence_alpha: 20
+
+min_user_interactions: 5
+min_item_interactions: 5
+
+split:
+  leave_one_out: true
+  global_time_split: true
+  global_holdout_days: 14
+
+random_seed: 42
