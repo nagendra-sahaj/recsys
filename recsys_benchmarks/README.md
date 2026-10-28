@@ -49,7 +49,7 @@ separate project rather than another folder over there.
 ## Setup
 
 ```bash
-cd /Users/nagendra/projects/recsys/recsys_benchmarks
+cd recsys_benchmarks
 uv sync
 ```
 
