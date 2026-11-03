@@ -92,7 +92,7 @@ that has nothing to do with RecBole.
 
 ---
 
-## 3. Evaluation protocol moves results more than any model choice
+## 3. The candidate set changes both the score and the ranking
 
 Same models, same data, same split. The only change is what the held-out item is ranked
 against — the full 3,125-item catalog, or 100 randomly sampled items (the protocol most
@@ -117,7 +117,7 @@ Two consequences:
   leaderboard is therefore unreliable even for *relative* comparisons.
 - **It flatters popularity most of all** (10.1×, the largest in the table). Against 100
   random competitors, recommending globally popular items is a far better strategy than
-  against a full catalog — so the dominant protocol systematically understates how much
+  against a full catalog — so the prevailing protocol systematically understates how much
   a personalized model beats the non-personalized baseline.
 
 ---

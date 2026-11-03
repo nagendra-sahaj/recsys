@@ -89,8 +89,10 @@ catalog (3,125 items) versus 100 uniformly sampled negatives plus the true item:
 **Two findings here, and the second is the more important one.**
 
 First, the magnitude. Changing nothing but the candidate set moves every model by 7–10×.
-No modelling decision in this entire project — not ALS vs popularity, not three attempts
-at a two-tower network — moved any metric remotely that far. The protocol dominates.
+For scale, the entire spread across our own models, popularity floor to best classical
+result, is about 2×. The two aren't comparable in kind — one is the same models measured
+against an easier task, the other a real difference in quality — but it does mean a number
+reported under one protocol tells you nothing about a number reported under the other.
 
 And our sampled-negative numbers land directly on published ones: papers using the
 1-positive-vs-99-negatives protocol report ML-1M HR@10 of roughly 0.52 for ItemKNN and
@@ -219,8 +221,9 @@ which is itself the point of the exercise. The closest available references:
   MF-BPR ≈ 0.54 on the same dataset — roughly **6× our numbers for the same algorithms**.
 
 That last line is the whole reason Phase B exists. Three sources, the same models, the
-same dataset, numbers spanning an order of magnitude — the protocol dominates. Phase B4
-measures that gap directly on both sides rather than citing it.
+same dataset, numbers spanning an order of magnitude — none of them comparable without
+knowing the protocol. Phase B4 measures that gap directly on both sides rather than citing
+it.
 
 ### What it took to run the framework at all
 

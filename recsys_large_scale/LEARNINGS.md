@@ -1152,9 +1152,9 @@ Headline findings so far, so this document isn't missing them:
   other model is measured against, so every paper using this baseline reports an inflated
   margin over it. Caught only because we had an independent implementation of the same
   trivial algorithm to disagree with.
-- **Evaluation protocol dominates model choice**, measured on our own models: switching
-  from full-catalog ranking to 100 sampled negatives moves Recall@10 by **7–10×** on
-  identical data — far more than any modelling decision in Phases 0–6 moved anything. Our
+- **A reported number can't be read without its protocol**, measured on our own models:
+  switching from full-catalog ranking to 100 sampled negatives moves Recall@10 by **7–10×**
+  on identical data. Our
   sampled-protocol numbers land on top of published ones (itemknn 0.5734 / bpr 0.5948 vs
   ~0.52 / ~0.54 reported), so the apparent gap to the literature was never a quality gap.
 - **The protocol also reorders models**, not just inflates them: `als_alpha1` beats `als`
